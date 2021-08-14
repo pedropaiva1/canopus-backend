@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript.
 
 ## Installation
 
@@ -48,6 +48,9 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Server runnin in
+(http://localhost:3000) 
 
 ## For docs, access
 (http://localhost:3000/docs)
