@@ -21,7 +21,7 @@ export class CarouselsService {
   async create(userId: String, createCarouselDto: CreateCarouselDto) {
     const { title } = createCarouselDto;
 
-    const carouselExists = await this.carouselRepository.findOne({ title });
+    const carouselExists = await this.carouselRepository.findOne({ title: title });
 
     if (carouselExists) {
       throw new BadRequestException(
@@ -29,7 +29,7 @@ export class CarouselsService {
       );
     }
 
-    const user = await this.userRepository.find({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
       throw new NotFoundException(`User with id ${userId} not found`);
@@ -37,12 +37,12 @@ export class CarouselsService {
 
     const carousel = await this.carouselRepository.create({
       title,
-      author: user[0],
+      author: user,
     });
 
     await this.carouselRepository.save(carousel);
 
-    return carousel;
+    return carousel
   }
 
   async findAll() {
