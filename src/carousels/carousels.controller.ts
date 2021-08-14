@@ -21,8 +21,7 @@ import { UpdateCarouselDto } from './dto/update-carousel.dto';
 @Controller('carousels')
 export class CarouselsController {
   constructor(
-    private readonly carouselsService: CarouselsService,
-    private readonly authService: AuthService,
+    private readonly carouselsService: CarouselsService
   ) {}
 
   @Post()

@@ -84,8 +84,9 @@ export class UsersController {
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @Request() req
   ) {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(id, updateUserDto, req.user.userId);
   }
 
   @Delete(':id')
@@ -101,8 +102,8 @@ export class UsersController {
     type: NotFoundSwagger,
   })
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.usersService.remove(id);
+  remove(@Param('id', new ParseUUIDPipe()) id: string, @Request() req) {
+    return this.usersService.remove(id, req.user.userId);
   }
 
   @UseGuards(AuthGuard('local'))

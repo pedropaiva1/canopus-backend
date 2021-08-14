@@ -21,7 +21,7 @@ export class CarouselEntity {
   title: string;
 
   @ManyToOne(type => UserEntity, author => author.id, { eager: true })
-  author: string;
+  author: UserEntity;
 
   @OneToMany(type => ImageEntity, image => image.id)
   images: ImageEntity[]

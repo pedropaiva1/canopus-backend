@@ -18,7 +18,7 @@ export class UsersService {
 
     const { name, email, password } = createUserDto
 
-    const userExists = await this.userRepository.findOne({ email })
+    const userExists = await this.userRepository.findOne({ email: email, name: name })
 
     if(userExists){
       throw new BadRequestException(`User with email ${email} already exists`)
@@ -62,23 +62,31 @@ export class UsersService {
     return await this.userRepository.findOne(id)
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto, userId:string) {
     const user = await this.findById(id)
 
     if(!user){
       throw new NotFoundException(`User with ${id} not found`)
     }
 
+    if(id !== userId){
+      throw new BadRequestException(`Operation not allowed for User with id ${id}`)
+    }
+
     this.userRepository.merge(user, updateUserDto)
     return await this.userRepository.save(user)
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId:string) {
     const userExists = await this.findById(id)
 
     if(!userExists){
       throw new NotFoundException(`User with ${id} not found`)
     } 
+
+    if(id !== userId){
+      throw new BadRequestException(`Operation not allowed for User with id ${id}`)
+    }
 
     await this.userRepository.softDelete(id)
      
