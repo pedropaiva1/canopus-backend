@@ -36,6 +36,11 @@ $ npm install
 $ yarn
 ```
 
+## Run a Dokcer container with command
+```bash
+docker run --name backend-canopus -p 5432:5432 -e POSTGRES_PASSWORD=docker -d postgres
+```
+
 ## Running the app
 
 ```bash
