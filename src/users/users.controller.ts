@@ -59,8 +59,8 @@ export class UsersController {
     type: NotFoundSwagger,
   })
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('email') email: string) {
-    return this.usersService.findOneOrFail(email);
+  findOne(@Param('id') id: string) {
+    return this.usersService.findById(id);
   }
 
   @Patch(':id')

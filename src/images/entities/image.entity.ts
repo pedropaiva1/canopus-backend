@@ -14,6 +14,9 @@ export class ImageEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string
+
   @Column({ type: 'varchar', nullable: false })
   description: string;
 

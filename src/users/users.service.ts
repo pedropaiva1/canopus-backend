@@ -18,7 +18,7 @@ export class UsersService {
 
     const { name, email, password } = createUserDto
 
-    const userExists = await this.userRepository.findOne({ email: createUserDto.email  })
+    const userExists = await this.userRepository.findOne({ email })
 
     if(userExists){
       throw new BadRequestException(`User with email ${email} already exists`)
@@ -58,8 +58,12 @@ export class UsersService {
     
   }
 
+  async findById(id: string) {
+    return await this.userRepository.findOne(id)
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.findOneOrFail(id)
+    const user = await this.findById(id)
 
     if(!user){
       throw new NotFoundException(`User with ${id} not found`)
@@ -70,7 +74,7 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    const userExists = await this.findOneOrFail(id)
+    const userExists = await this.findById(id)
 
     if(!userExists){
       throw new NotFoundException(`User with ${id} not found`)
