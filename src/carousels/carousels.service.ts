@@ -18,7 +18,7 @@ export class CarouselsService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
-  async create(userId: String, createCarouselDto: CreateCarouselDto) {
+  async create(userId: string, createCarouselDto: CreateCarouselDto) {
     const { title } = createCarouselDto;
 
     const carouselExists = await this.carouselRepository.findOne({ title: title });
@@ -63,24 +63,34 @@ export class CarouselsService {
     }
   }
 
-  async update(id: number, updateCarouselDto: UpdateCarouselDto) {
+  async update(id: number, updateCarouselDto: UpdateCarouselDto, userId: string) {
     const carousel = await this.findOneOrFail(id);
 
     if (!carousel) {
       throw new NotFoundException(`Carousel with ${id} not found`);
     }
 
+    if(carousel.author.id !== userId){
+      throw new BadRequestException(`Operation not allowed for User with id ${userId}`)
+    }
+
     this.carouselRepository.merge(carousel, updateCarouselDto);
     return await this.carouselRepository.save(carousel);
   }
 
-  async remove(id: number) {
-    const carouselExists = await this.findOneOrFail(id);
+  async remove(id: number, userId: string) {
+    console.log(id);
+    const carouselExists = await this.carouselRepository.findOne(id);
 
     if (!carouselExists) {
       throw new NotFoundException(`carousel with ${id} not found`);
     }
 
+    if(carouselExists.author.id !== userId){
+      throw new BadRequestException(`Operation not allowed for User with id ${userId}`)
+    }
+
     await this.carouselRepository.softDelete(id);
+
   }
 }

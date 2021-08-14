@@ -41,8 +41,8 @@ export class CarouselsController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Find one Carousel' })
-  findOne(@Param('id') id: string) {
-    return this.carouselsService.findOneOrFail(+id);
+  findOne(@Param('id') id: number) {
+    return this.carouselsService.findOneOrFail(id);
   }
 
   @Patch(':id')
@@ -51,14 +51,15 @@ export class CarouselsController {
   update(
     @Param('id') id: number,
     @Body() updateCarouselDto: UpdateCarouselDto,
+    @Request() req,
   ) {
-    return this.carouselsService.update(id, updateCarouselDto);
+    return this.carouselsService.update(id, updateCarouselDto, req.user.userId);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete Carousel' })
-  remove(@Param('id') id: number) {
-    return this.carouselsService.remove(id);
+  remove(@Param('id') id: number, @Request() req,) {
+    return this.carouselsService.remove(id, req.user.userId);
   }
 }
