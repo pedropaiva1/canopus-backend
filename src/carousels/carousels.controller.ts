@@ -50,7 +50,6 @@ export class CarouselsController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update Carousel' })
   update(
-    @Request() req,
     @Param('id') id: number,
     @Body() updateCarouselDto: UpdateCarouselDto,
   ) {
@@ -58,6 +57,7 @@ export class CarouselsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete Carousel' })
   remove(@Param('id') id: number) {
     return this.carouselsService.remove(id);

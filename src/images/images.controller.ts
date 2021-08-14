@@ -1,12 +1,20 @@
-import { Body, Param, UseGuards } from '@nestjs/common';
+
 import {
+  Body,
+  Delete, 
+  Get,
+  Param, 
+  UseGuards,
   Controller,
   Post,
   UseInterceptors,
   UploadedFile,
-  Request
+  Request,
+  HttpCode,
+  HttpStatus
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ImagesService } from './images.service';
 
@@ -18,6 +26,7 @@ export class ImagesController {
 
   @Post('upload')
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Upload a file' })
   @UseInterceptors(
     FileInterceptor('photo', {
       dest: './uploads',
@@ -29,9 +38,21 @@ export class ImagesController {
     @Body() body,
     @Param('carouselId') carouselId: number,
   ) {
-    console.log(body);
-    console.log(file);
+    return this.imageService.create(file, body, carouselId);
+  }
 
-    return this.imageService.create(file, body, carouselId, req.user.userId);
+  @Get()
+  @ApiOperation({ summary: 'List Files' })
+  @UseGuards(JwtAuthGuard)
+  findAll(){
+    return this.imageService.findAll()
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete Files' })
+  remove(@Param('id') id: number){
+    return this.imageService.remove(id)
   }
 }
